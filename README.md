@@ -24,6 +24,13 @@ Built with **Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma
    *(On macOS the first time you may need to right-click → "Open" to bypass
    Gatekeeper. On Linux, if double-click doesn't run it, run
    `chmod +x start-linux.sh && ./start-linux.sh` in a terminal.)*
+
+  ** Mac :**
+   cd /Users/——-/Unlimited-Claude-ai-main
+   chmod +x start-mac.command
+   xattr -d com.apple.quarantine start-mac.command
+   ./start-mac.command
+
 3. The launcher installs dependencies, sets up the database, starts the server,
    and opens `http://localhost:3000` in your browser.
 
