@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from 'react'
 import { Sidebar } from '@/components/chat/sidebar'
 import { ChatArea } from '@/components/chat/chat-area'
 import { PuterConnectPrompt } from '@/components/puter-connect-prompt'
+import { HelpPopup } from '@/components/chat/help-popup'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { PanelRight } from 'lucide-react'
@@ -60,6 +61,9 @@ export default function Home() {
 
       {/* Connect-to-AI prompt (when the user tries to chat without Puter) */}
       <PuterConnectPrompt />
+
+      {/* Help popup — shows on first load with token-saving tips */}
+      <HelpPopup />
     </div>
   )
 }
