@@ -194,7 +194,7 @@ export function ChatInput({ chatId }: { chatId: string | null }) {
         <div
           className={cn(
             'relative flex items-end gap-2 rounded-[22px] border bg-card/80 p-2 shadow-[0_1px_3px_rgba(0,0,0,0.06),0_8px_24px_-12px_rgba(0,0,0,0.18)] backdrop-blur-xl transition',
-            'focus-within:border-amber-500/40 focus-within:shadow-[0_0_0_4px_rgba(245,158,11,0.12),0_8px_24px_-12px_rgba(0,0,0,0.18)]',
+            'focus-within:border-violet-500/40 focus-within:shadow-[0_0_0_4px_rgba(139,92,246,0.12),0_8px_24px_-12px_rgba(0,0,0,0.18)]',
             disabled && 'opacity-60'
           )}
         >
@@ -251,7 +251,7 @@ export function ChatInput({ chatId }: { chatId: string | null }) {
             size="icon"
             onClick={submit}
             disabled={!canSend}
-            className="uc-pressable uc-sheen h-9 w-9 shrink-0 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-sm hover:from-amber-600 hover:to-orange-700 disabled:opacity-40"
+            className="uc-pressable uc-sheen h-9 w-9 shrink-0 rounded-full uc-iridescent text-white shadow-sm  disabled:opacity-40"
             aria-label={sending ? 'Sending' : 'Send message'}
           >
             {sending || uploading ? (

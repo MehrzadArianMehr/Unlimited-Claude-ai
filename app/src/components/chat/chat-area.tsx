@@ -128,7 +128,7 @@ export function ChatArea({ onOpenSidebar }: { onOpenSidebar: () => void }) {
           </Button>
         )}
 
-        <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500/15 to-orange-600/15 px-2.5 py-0.5 text-[11px] font-medium text-amber-700 ring-1 ring-inset ring-amber-500/30 dark:text-amber-300">
+        <span className="inline-flex items-center gap-1 rounded-full uc-iridescent-soft px-2.5 py-0.5 text-[11px] font-medium text-violet-300 ring-1 ring-inset ring-violet-500/30">
           <Sparkles className="h-3 w-3" />
           AI
         </span>
@@ -242,7 +242,7 @@ function EmptyState({
         initial={{ opacity: 0, scale: 0.9, y: 6 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={springSnappy}
-        className="mb-5 flex h-16 w-16 items-center justify-center rounded-[22px] bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-[0_8px_24px_-8px_rgba(245,158,11,0.6)] ring-1 ring-black/10 dark:ring-white/10"
+        className="mb-5 flex h-16 w-16 items-center justify-center rounded-[22px] uc-iridescent text-white shadow-[0_8px_24px_-8px_rgba(139,92,246,0.6)] ring-1 ring-black/10 dark:ring-white/10"
       >
         <Sparkles className="h-7 w-7" />
       </motion.div>
@@ -291,7 +291,7 @@ function EmptyState({
             whileHover={{ y: -2, scale: 1.01, transition: springSnappy }}
             whileTap={{ scale: 0.98 }}
             onClick={onStart}
-            className="uc-pressable group rounded-2xl border border-border/70 bg-card/60 p-3.5 text-left backdrop-blur-sm transition hover:border-amber-500/40 hover:bg-accent/50 hover:shadow-sm"
+            className="uc-pressable group rounded-2xl border border-border/70 bg-card/60 p-3.5 text-left backdrop-blur-sm transition hover:border-violet-500/40 hover:bg-accent/50 hover:shadow-sm"
           >
             <div className="text-[13px] font-semibold tracking-tight">
               {s.t}
@@ -306,7 +306,7 @@ function EmptyState({
       {!hasChat && (
         <Button
           onClick={onStart}
-          className="uc-pressable uc-sheen mt-6 gap-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-4 text-white hover:from-amber-600 hover:to-orange-700"
+          className="uc-pressable uc-sheen mt-6 gap-2 rounded-2xl uc-iridescent px-4 text-white "
         >
           <Plus className="h-4 w-4" />
           Start a new chat

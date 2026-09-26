@@ -78,21 +78,21 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     content: m.content,
   }))
 
-  // 3. Call the LLM — pass the latest user message's image attachments
+  // 3. Call the LLM — pass the latest user message's image attachments.
+  // If the z-ai SDK isn't available (e.g. no credentials outside the
+  // sandbox), gracefully fall back to a canned reply so the chat UI keeps
+  // working instead of returning a 502.
   let assistantContent: string
+  let fellBack = false
   try {
     assistantContent = await getChatReply(history, {
       lastUserAttachments: attachments,
     })
   } catch (e) {
-    return NextResponse.json(
-      {
-        error: 'Failed to get AI reply',
-        detail: e instanceof Error ? e.message : 'Unknown error',
-        userMessage,
-      },
-      { status: 502 }
-    )
+    fellBack = true
+    const reason = e instanceof Error ? e.message : 'Unknown error'
+    assistantContent =
+      `> ⚠️ **AI backend unavailable** (${reason}).\n>\n> This is a demo build of **Unlimited Claude**. The full AI model needs credentials that aren't configured on this machine.\n>\n> You said: *${content.replace(/\n+/g, ' ')}*.\n>\n> To enable real AI replies, either run this app in the Z.ai sandbox, or sign in with **Puter** (bottom of the sidebar) — Puter provides free unlimited Claude access via your own account.`
   }
 
   // Fallback if empty
@@ -100,6 +100,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     assistantContent =
       "I'm sorry, I couldn't generate a response. Please try again."
   }
+  void fellBack
 
   // 4. Save assistant message
   const assistantMessage = await db.message.create({

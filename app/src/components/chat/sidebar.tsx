@@ -247,12 +247,12 @@ export function Sidebar({
             {isActive && (
               <motion.span
                 layoutId="active-chat-bar"
-                className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-gradient-to-b from-amber-500 to-orange-600"
+                className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full uc-iridescent"
                 transition={springDefault}
               />
             )}
             {c.pinned && (
-              <Pin className="h-3 w-3 shrink-0 text-amber-600 dark:text-amber-400" />
+              <Pin className="h-3 w-3 shrink-0 text-violet-400 dark:text-violet-300" />
             )}
             <span className="min-w-0 flex-1 truncate">{c.title}</span>
             {(c._count?.messages ?? 0) > 0 && (
@@ -312,7 +312,7 @@ export function Sidebar({
       {/* Top bar: brand + theme toggle */}
       <div className="flex items-center justify-between gap-2 px-4 pb-2 pt-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-sm ring-1 ring-black/10 dark:ring-white/10">
+          <div className="flex h-8 w-8 items-center justify-center rounded-[10px] uc-iridescent text-white shadow-sm ring-1 ring-black/10 dark:ring-white/10">
             <MessageSquare className="h-4 w-4" />
           </div>
           <div className="leading-tight">
@@ -352,7 +352,7 @@ export function Sidebar({
       <div className="px-3 pb-2">
         <Button
           onClick={handleNewChat}
-          className="uc-pressable uc-sheen w-full justify-start gap-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-3.5 text-white shadow-sm hover:from-amber-600 hover:to-orange-700"
+          className="uc-pressable uc-sheen w-full justify-start gap-2 rounded-2xl uc-iridescent px-3.5 text-white shadow-sm "
         >
           <Plus className="h-4 w-4" />
           <span className="font-medium">New chat</span>
@@ -371,7 +371,7 @@ export function Sidebar({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search chats"
-            className="h-9 rounded-xl border-border/60 bg-muted/50 pl-8 pr-7 text-[13px] shadow-none focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-amber-500/30"
+            className="h-9 rounded-xl border-border/60 bg-muted/50 pl-8 pr-7 text-[13px] shadow-none focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-violet-500/30"
           />
           {query && (
             <button
@@ -458,7 +458,7 @@ export function Sidebar({
         <PuterAccountCard>
           {/* local-name fallback (shown only when not signed into Puter) */}
           <div className="uc-pressable flex items-center gap-3 rounded-2xl bg-accent/30 p-2.5 ring-1 ring-inset ring-black/5 dark:ring-white/5">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-[11px] font-semibold text-white shadow-sm">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full uc-iridescent text-[11px] font-semibold text-white shadow-sm">
               {initials || 'U'}
             </div>
             <div className="min-w-0 flex-1">

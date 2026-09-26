@@ -108,7 +108,7 @@ export function MessageBubble({ message, isLast }: Props) {
           'uc-pressable flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold shadow-sm ring-1 ring-black/5 dark:ring-white/10',
           isUser
             ? 'bg-primary text-primary-foreground'
-            : 'bg-gradient-to-br from-amber-500 to-orange-600 text-white'
+            : 'uc-iridescent text-white'
         )}
         aria-hidden
       >
@@ -231,7 +231,7 @@ export function MessageBubble({ message, isLast }: Props) {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onEditKeyDown}
-              className="uc-scroll min-h-[44px] max-h-[200px] w-full resize-none rounded-2xl rounded-tr-md bg-primary/5 p-3 text-[0.95rem] shadow-sm focus-visible:ring-2 focus-visible:ring-amber-500/40"
+              className="uc-scroll min-h-[44px] max-h-[200px] w-full resize-none rounded-2xl rounded-tr-md bg-primary/5 p-3 text-[0.95rem] shadow-sm focus-visible:ring-2 focus-visible:ring-violet-500/40"
               rows={1}
             />
             <div className="mt-1.5 flex items-center justify-end gap-1.5">
@@ -343,7 +343,7 @@ export function TypingBubble() {
       transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
       className="flex w-full gap-3 sm:gap-4 px-4 sm:px-6 py-4"
     >
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full uc-iridescent text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10">
         <Bot className="h-4 w-4" />
       </div>
       <div className="flex min-w-0 flex-col gap-1.5">

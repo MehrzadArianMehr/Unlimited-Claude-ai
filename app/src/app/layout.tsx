@@ -20,28 +20,8 @@ export const metadata: Metadata = {
   title: "Unlimited Claude — AI Chat",
   description:
     "Unlimited Claude — a fast, friendly AI chat assistant. Start a new chat, browse your history, and rename your profile.",
-  keywords: [
-    "Claude",
-    "AI chat",
-    "Unlimited Claude",
-    "assistant",
-    "Next.js",
-    "TypeScript",
-  ],
-  authors: [{ name: "Unlimited Claude" }],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
-  },
-  openGraph: {
-    title: "Unlimited Claude — AI Chat",
-    description: "A fast, friendly AI chat assistant.",
-    siteName: "Unlimited Claude",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Unlimited Claude — AI Chat",
-    description: "A fast, friendly AI chat assistant.",
   },
 };
 
@@ -50,27 +30,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Dark-only Leonardo-style theme — forced via the `dark` class on <html>.
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        {/* Puter.js — free serverless cloud + AI + auth. Loaded async so the
-            page renders first; the auth hook polls for `window.puter`. */}
-        <Script
-          src="https://js.puter.com/v2/"
-          strategy="afterInteractive"
-        />
+        <Script src="https://js.puter.com/v2/" strategy="afterInteractive" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}
-          <Toaster richColors closeButton position="top-center" />
+          <Toaster richColors closeButton position="top-center" theme="dark" />
         </ThemeProvider>
       </body>
     </html>
