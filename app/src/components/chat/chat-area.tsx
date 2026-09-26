@@ -140,6 +140,14 @@ export function ChatArea({ onOpenSidebar }: { onOpenSidebar: () => void }) {
         onScroll={onScroll}
         className="uc-scroll relative min-h-0 flex-1 overflow-y-auto"
       >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeChatId ?? 'empty'}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={springSnappy}
+          >
         {isEmpty ? (
           <EmptyState
             onStart={() => void createChat()}
@@ -179,6 +187,8 @@ export function ChatArea({ onOpenSidebar }: { onOpenSidebar: () => void }) {
             <div className="h-4" />
           </div>
         )}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Scroll-to-bottom floating button (Apple-style, material) */}

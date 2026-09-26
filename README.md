@@ -19,8 +19,11 @@ Built with **Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma
 2. Double-click the launcher for your OS:
    - **Windows:** `start-windows.bat`
    - **macOS:** `start-mac.command`
+   - **Linux:** `start-linux.sh` (run `./start-linux.sh` in a terminal, or
+     right-click → "Run" in your file manager)
    *(On macOS the first time you may need to right-click → "Open" to bypass
-   Gatekeeper.)*
+   Gatekeeper. On Linux, if double-click doesn't run it, run
+   `chmod +x start-linux.sh && ./start-linux.sh` in a terminal.)*
 3. The launcher installs dependencies, sets up the database, starts the server,
    and opens `http://localhost:3000` in your browser.
 
@@ -86,6 +89,7 @@ the sidebar header). Type the slash command in the chat input and press Enter.
 .
 ├── start-windows.bat        # Windows launcher
 ├── start-mac.command        # macOS launcher
+├── start-linux.sh           # Linux launcher
 ├── package.json
 ├── prisma/schema.prisma      # Profile, Chat, Message models
 ├── public/uploads/          # generated images / uploaded files

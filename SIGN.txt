@@ -16,6 +16,7 @@ Project structure:
   ├── README.md                <- setup + usage docs
   ├── start-windows.bat        <- Windows one-click launcher
   ├── start-mac.command        <- macOS one-click launcher
+├── start-linux.sh           <- Linux one-click launcher
   └── app/                     <- the full Next.js project
       ├── package.json
       ├── prisma/schema.prisma
