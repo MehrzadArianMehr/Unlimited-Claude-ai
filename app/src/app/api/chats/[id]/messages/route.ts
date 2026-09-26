@@ -25,10 +25,12 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   const { id } = await params
 
   let content = ''
+  let assistantReply = ''
   let attachments: AttachmentRef[] = []
   try {
     const body = await req.json()
     if (typeof body?.content === 'string') content = body.content.trim()
+    if (typeof body?.assistantReply === 'string') assistantReply = body.assistantReply
     if (Array.isArray(body?.attachments)) {
       attachments = (body.attachments as AttachmentRef[]).filter(
         (a) => a && typeof a.url === 'string' && typeof a.name === 'string'
@@ -78,21 +80,29 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     content: m.content,
   }))
 
-  // 3. Call the LLM — pass the latest user message's image attachments.
-  // If the z-ai SDK isn't available (e.g. no credentials outside the
-  // sandbox), gracefully fall back to a canned reply so the chat UI keeps
-  // working instead of returning a 502.
+  // 3. Generate the assistant reply.
+  //    a) If the client passed a pre-generated `assistantReply` (produced
+  //       client-side via Puter's free AI — window.puter.ai.chat), use it
+  //       directly. This works on any machine with NO .z-ai-config needed.
+  //    b) Otherwise fall back to the z-ai SDK (sandbox-only). If that fails
+  //       (no credentials on the user's machine), use a canned message
+  //       that explains how to enable real AI via Puter.
   let assistantContent: string
   let fellBack = false
-  try {
-    assistantContent = await getChatReply(history, {
-      lastUserAttachments: attachments,
-    })
-  } catch (e) {
-    fellBack = true
-    const reason = e instanceof Error ? e.message : 'Unknown error'
-    assistantContent =
-      `> ⚠️ **AI backend unavailable** (${reason}).\n>\n> This is a demo build of **Unlimited Claude**. The full AI model needs credentials that aren't configured on this machine.\n>\n> You said: *${content.replace(/\n+/g, ' ')}*.\n>\n> To enable real AI replies, either run this app in the Z.ai sandbox, or sign in with **Puter** (bottom of the sidebar) — Puter provides free unlimited Claude access via your own account.`
+
+  if (assistantReply && assistantReply.trim()) {
+    assistantContent = assistantReply.trim()
+  } else {
+    try {
+      assistantContent = await getChatReply(history, {
+        lastUserAttachments: attachments,
+      })
+    } catch (e) {
+      fellBack = true
+      const reason = e instanceof Error ? e.message : 'Unknown error'
+      assistantContent =
+        `> ⚠️ **AI backend unavailable** (${reason}).\n>\n> This is a demo build of **Unlimited Claude**. The full AI model needs credentials that aren't configured on this machine.\n>\n> You said: *${content.replace(/\n+/g, ' ')}*.\n>\n> To enable real AI replies, **sign in with Puter** (the "Login with Puter" button at the bottom of the sidebar) — Puter provides free unlimited Claude access via your own account, no config needed.`
+    }
   }
 
   // Fallback if empty

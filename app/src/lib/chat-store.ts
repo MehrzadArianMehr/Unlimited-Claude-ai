@@ -282,11 +282,40 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
     set((s) => ({ messages: [...s.messages, tempUser], sending: true }))
 
+    // ---- Real AI via Puter (client-side, no config needed) ----
+    // When the user is signed into Puter, call window.puter.ai.chat() with
+    // the conversation history to generate a real reply. Pass it to the API
+    // as `assistantReply` so the server saves it directly (no z-ai SDK call
+    // that would fail without .z-ai-config on the user's machine).
+    let assistantReply: string | undefined
+    try {
+      const { getPuterReply } = await import('@/lib/puter')
+      const history: { role: 'user' | 'assistant'; content: string }[] = [
+        ...get().messages
+          .filter((m) => m.id !== tempUser.id)
+          .map((m) => ({
+            role: (m.role === 'assistant' ? 'assistant' : 'user') as
+              | 'user'
+              | 'assistant',
+            content: m.content,
+          })),
+        { role: 'user', content: trimmed || '(image attached)' },
+      ]
+      const reply = await getPuterReply(history)
+      if (reply && reply.trim()) assistantReply = reply.trim()
+    } catch {
+      /* puter not available — fall through to server-side z-ai */
+    }
+
     try {
       const res = await fetch(`/api/chats/${activeId}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: trimmed, attachments: atts }),
+        body: JSON.stringify({
+          content: trimmed,
+          attachments: atts,
+          ...(assistantReply ? { assistantReply } : {}),
+        }),
       })
       const data = await res.json()
       if (!res.ok) {
