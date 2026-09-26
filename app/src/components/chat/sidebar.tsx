@@ -15,7 +15,6 @@ import {
   Search,
   X,
   Sparkles,
-  Download,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -335,16 +334,6 @@ export function Sidebar({
             <Sparkles className="h-4 w-4" />
             <span className="absolute right-1 top-1 inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 ring-2 ring-sidebar" />
           </Button>
-          <a
-            href="/api/download/zip"
-            download="unlimited-claude.zip"
-            className="uc-pressable inline-flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
-            aria-label="Download project as zip"
-            title="Download project (.zip)"
-            onClick={() => toast.success('Downloading project (.zip)')}
-          >
-            <Download className="h-4 w-4" />
-          </a>
           <Button
             variant="ghost"
             size="icon"
