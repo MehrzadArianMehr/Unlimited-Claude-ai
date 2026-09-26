@@ -22,15 +22,22 @@ fi
 
 cd "$(dirname "$0")/app" || { echo "[ERROR] app/ folder not found."; read -rp "Press Enter..."; exit 1; }
 
-echo "[1/3] Installing dependencies (bun install)..."
+echo "[1/4] Installing dependencies (bun install)..."
 bun install || { echo "[ERROR] Dependency installation failed."; read -rp "Press Enter..."; exit 1; }
 echo
 
-echo "[2/3] Setting up the database (bun run db:push)..."
+echo "[2/4] Generating Prisma client (prisma generate)..."
+bun run db:generate 2>/dev/null || npx prisma generate
+echo
+
+echo "[3/4] Setting up the database (bun run db:push)..."
+mkdir -p db
 bun run db:push
 echo
 
-echo "[3/3] Starting the dev server..."
+echo "[4/4] Starting the dev server..."
+# clear stale Turbopack cache (prevents Prisma module resolution errors)
+rm -rf .next 2>/dev/null
 echo
 echo "============================================"
 echo "  The app will open in your browser shortly."

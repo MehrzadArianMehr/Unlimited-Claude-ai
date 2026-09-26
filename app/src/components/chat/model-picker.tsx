@@ -76,7 +76,7 @@ export function ModelPicker() {
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [signedIn])
 
   const options: { id: string; label: string; provider?: string; context?: number }[] =
