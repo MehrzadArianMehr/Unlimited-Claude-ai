@@ -54,6 +54,16 @@ export function ModelPicker() {
         if (cancelled) return
         if (models.length > 0) {
           setPuterModels(models)
+          // if the current model isn't in the real list, auto-switch to the
+          // first available model (prevents sending an invalid model ID)
+          const currentValid = models.some(
+            (m) =>
+              m.id === aiModel ||
+              (m.aliases && m.aliases.includes(aiModel))
+          )
+          if (!currentValid && models.length > 0) {
+            setAiModel(models[0].id)
+          }
           return
         }
       } catch {
@@ -66,6 +76,7 @@ export function ModelPicker() {
     return () => {
       cancelled = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn])
 
   const options: { id: string; label: string; provider?: string; context?: number }[] =

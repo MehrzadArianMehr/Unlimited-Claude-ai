@@ -90,6 +90,11 @@ type ChatState = {
   archiveChat: (id: string, archived: boolean) => Promise<void>
   deleteChat: (id: string) => Promise<void>
   sendMessage: (content: string, attachments?: Attachment[]) => Promise<void>
+  // Puter connect prompt state
+  showPuterPrompt: boolean
+  pendingMessage: { content: string; attachments?: Attachment[] } | null
+  dismissPuterPrompt: () => void
+  connectPuterAndSend: () => Promise<void>
   regenerate: () => Promise<boolean>
   editUserMessage: (id: string, content: string) => Promise<boolean>
   invokeSkill: (skill: 'image' | 'video', prompt: string) => Promise<boolean>
@@ -107,6 +112,30 @@ export const useChatStore = create<ChatState>((set, get) => ({
       window.localStorage.setItem('uc.aiModel', aiModel)
     } catch {
       /* ignore */
+    }
+  },
+  showPuterPrompt: false,
+  pendingMessage: null,
+  dismissPuterPrompt() {
+    set({ showPuterPrompt: false, pendingMessage: null })
+  },
+  async connectPuterAndSend() {
+    // called from a user click — opens the Puter sign-in popup, then re-sends
+    // the pending message now that the user is signed in.
+    try {
+      if (typeof window !== 'undefined' && window.puter?.auth) {
+        await window.puter.auth.signIn()
+      }
+    } catch {
+      /* user cancelled or puter unavailable */
+    }
+    const pending = get().pendingMessage
+    set({ showPuterPrompt: false, pendingMessage: null })
+    if (pending) {
+      // give puter a moment to settle, then re-send
+      setTimeout(() => {
+        void get().sendMessage(pending.content, pending.attachments)
+      }, 300)
     }
   },
   loadingChats: false,
@@ -315,24 +344,50 @@ export const useChatStore = create<ChatState>((set, get) => ({
     // the conversation history to generate a real reply. Pass it to the API
     // as `assistantReply` so the server saves it directly (no z-ai SDK call
     // that would fail without .z-ai-config on the user's machine).
+    //
+    // If Puter.js is loaded but the user ISN'T signed in, we DON'T send a
+    // canned message — instead we prompt them to connect Puter (one click)
+    // and queue the message to re-send after sign-in.
     let assistantReply: string | undefined
+    let needsPuter = false
     try {
-      const { getPuterReply } = await import('@/lib/puter')
-      const history: { role: 'user' | 'assistant'; content: string }[] = [
-        ...get().messages
-          .filter((m) => m.id !== tempUser.id)
-          .map((m) => ({
-            role: (m.role === 'assistant' ? 'assistant' : 'user') as
-              | 'user'
-              | 'assistant',
-            content: m.content,
-          })),
-        { role: 'user', content: trimmed || '(image attached)' },
-      ]
-      const reply = await getPuterReply(history, get().aiModel || undefined)
-      if (reply && reply.trim()) assistantReply = reply.trim()
+      const { getPuterReply, isPuterReady } = await import('@/lib/puter')
+      // If puter.js is loaded but not signed in → prompt the user.
+      if (
+        typeof window !== 'undefined' &&
+        window.puter?.ai?.chat &&
+        !isPuterReady()
+      ) {
+        needsPuter = true
+      } else {
+        const history: { role: 'user' | 'assistant'; content: string }[] = [
+          ...get().messages
+            .filter((m) => m.id !== tempUser.id)
+            .map((m) => ({
+              role: (m.role === 'assistant' ? 'assistant' : 'user') as
+                | 'user'
+                | 'assistant',
+              content: m.content,
+            })),
+          { role: 'user', content: trimmed || '(image attached)' },
+        ]
+        const reply = await getPuterReply(history, get().aiModel || undefined)
+        if (reply && reply.trim()) assistantReply = reply.trim()
+      }
     } catch {
       /* puter not available — fall through to server-side z-ai */
+    }
+
+    // If puter.js loaded but the user isn't signed in, prompt them to connect
+    // (a real, free AI account) instead of showing the canned message.
+    if (needsPuter) {
+      set((s) => ({
+        messages: s.messages.filter((m) => m.id !== tempUser.id),
+        sending: false,
+        showPuterPrompt: true,
+        pendingMessage: { content: trimmed, attachments: atts.length > 0 ? atts : undefined },
+      }))
+      return
     }
 
     try {
