@@ -1,0 +1,392 @@
+/* Mehrzad ArianMehr© */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-optical-sizing: auto;
+    /* Apple-style system font stack — ships optical sizing + tracking tables */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro",
+      "Segoe UI", system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "kern", "liga", "calt";
+  }
+  /* Headings: negative tracking as they grow, tight leading (Apple typography) */
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-weight: 600;
+  }
+  /* Small text: slightly positive tracking for legibility */
+  .uc-tiny {
+    font-size: 11px;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* ===========================================================
+   Apple-style materials (translucent layers with vibrancy)
+   =========================================================== */
+.uc-material {
+  background: color-mix(in oklch, var(--background) 72%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+}
+.uc-material-strong {
+  background: color-mix(in oklch, var(--background) 60%, transparent);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+}
+.dark .uc-material {
+  background: color-mix(in oklch, var(--background) 62%, transparent);
+}
+.dark .uc-material-strong {
+  background: color-mix(in oklch, var(--background) 50%, transparent);
+}
+/* Bright top edge — like light catching a glass surface */
+.uc-material::before,
+.uc-material-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--foreground) 14%, transparent),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Scroll-edge fade mask (instead of a hard 1px divider under floating chrome) */
+.uc-edge-fade-top {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 28px);
+  mask-image: linear-gradient(to bottom, transparent, black 28px);
+}
+
+/* ===========================================================
+   Pointer-down feedback — instant, on the press (Apple "Response")
+   =========================================================== */
+.uc-pressable {
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 120ms ease-out, box-shadow 120ms ease-out;
+  will-change: transform;
+}
+.uc-pressable:active {
+  transform: scale(0.96);
+}
+
+/* ===========================================================
+   Custom scrollbars (thin, unobtrusive)
+   =========================================================== */
+.uc-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--muted-foreground) 35%, transparent) transparent;
+}
+.uc-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.uc-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.uc-scroll::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklch, var(--muted-foreground) 35%, transparent);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.uc-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklch, var(--muted-foreground) 55%, transparent);
+}
+
+/* ===========================================================
+   Markdown / message prose
+   =========================================================== */
+.uc-prose {
+  line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  letter-spacing: -0.003em;
+}
+.uc-prose p {
+  margin: 0 0 0.75rem;
+}
+.uc-prose p:last-child {
+  margin-bottom: 0;
+}
+.uc-prose h1,
+.uc-prose h2,
+.uc-prose h3,
+.uc-prose h4 {
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 1.2rem 0 0.6rem;
+}
+.uc-prose h1 {
+  font-size: 1.35rem;
+}
+.uc-prose h2 {
+  font-size: 1.2rem;
+}
+.uc-prose h3 {
+  font-size: 1.05rem;
+}
+.uc-prose ul,
+.uc-prose ol {
+  margin: 0 0 0.75rem;
+  padding-left: 1.4rem;
+}
+.uc-prose ul {
+  list-style: disc;
+}
+.uc-prose ol {
+  list-style: decimal;
+}
+.uc-prose li {
+  margin: 0.2rem 0;
+}
+.uc-prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.uc-prose code {
+  font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.85em;
+  background: color-mix(in oklch, var(--muted) 80%, transparent);
+  padding: 0.12rem 0.35rem;
+  border-radius: 6px;
+}
+.uc-prose pre {
+  background: color-mix(in oklch, var(--muted) 55%, transparent);
+  border: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  border-radius: 0.6rem;
+  overflow-x: auto;
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.uc-prose pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+.uc-prose blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 0.85rem;
+  color: var(--muted-foreground);
+  margin: 0 0 0.75rem;
+}
+.uc-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+}
+.uc-prose th,
+.uc-prose td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+.uc-prose th {
+  background: color-mix(in oklch, var(--muted) 60%, transparent);
+  font-weight: 600;
+}
+
+/* ===========================================================
+   Typing indicator (3 dots)
+   =========================================================== */
+@keyframes uc-bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+.uc-typing-dot {
+  animation: uc-bounce 1.2s infinite ease-in-out both;
+}
+
+/* ===========================================================
+   Reduced motion & reduced transparency (Apple accessibility)
+   =========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .uc-material,
+  .uc-material-strong {
+    background: var(--background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .uc-material,
+  .uc-material-strong {
+    background: var(--background);
+    border: 1px solid var(--border);
+  }
+}
+
+/* ===========================================================
+   Subtle gradient sheen for primary action buttons.
+   Uses a ::after overlay so it does NOT clobber the element's own
+   background-image (e.g. Tailwind's `bg-gradient-to-r`) — it layers on top.
+   =========================================================== */
+.uc-sheen {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.uc-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, white 20%, transparent) 0%,
+    transparent 45%
+  );
+  z-index: 0;
+}
+/* keep the button's own content above the sheen layer */
+.uc-sheen > * {
+  position: relative;
+  z-index: 1;
+}
