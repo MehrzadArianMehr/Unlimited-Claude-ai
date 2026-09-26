@@ -304,8 +304,9 @@ export function ChatInput({ chatId }: { chatId: string | null }) {
 }
 
 /**
- * Model selector dropdown — shows the models Puter exposes (fetched via
- * puter.ai.listModels()) when signed in, falling back to a built-in list.
+ * Model selector dropdown — BIG, grouped by provider/company.
+ * Shows the models Puter exposes (via puter.ai.listModels()) when signed in,
+ * falling back to a built-in list. Each company gets its own labeled section.
  */
 function ModelSelector({
   aiModel,
@@ -319,14 +320,24 @@ function ModelSelector({
   const [open, setOpen] = useState(false)
 
   // build the option list: prefer puter's real list; fall back to built-ins
-  const options: { id: string; label: string; provider?: string }[] =
+  const options: { id: string; label: string; provider?: string; context?: number }[] =
     puterModels.length > 0
       ? puterModels.map((m) => ({
           id: m.id,
           label: m.name || m.id,
           provider: m.provider,
+          context: m.context,
         }))
       : AI_MODELS.map((m) => ({ id: m.id, label: m.label, provider: m.vendor }))
+
+  // group by provider
+  const groups = new Map<string, typeof options>()
+  for (const o of options) {
+    const key = (o.provider || 'other').toLowerCase()
+    const arr = groups.get(key) ?? []
+    arr.push(o)
+    groups.set(key, arr)
+  }
 
   const current =
     options.find((o) => o.id === aiModel) ||
@@ -337,49 +348,72 @@ function ModelSelector({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="uc-pressable inline-flex h-9 max-w-[150px] items-center gap-1 rounded-full px-2.5 text-[12px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+        className="uc-pressable uc-focus inline-flex h-9 max-w-[170px] items-center gap-1.5 rounded-full border border-white/10 bg-white/4 px-2.5 text-[12px] font-medium text-foreground/85 hover:bg-white/8"
         title="Select AI model"
       >
-        <Sparkles className="h-3.5 w-3.5 uc-text-iridescent" />
+        <span className="uc-iridescent flex h-4 w-4 shrink-0 items-center justify-center rounded">
+          <Sparkles className="h-3 w-3 text-white" />
+        </span>
         <span className="truncate">{current.label}</span>
-        <ChevronDown className={cn('h-3.5 w-3.5 transition', open && 'rotate-180')} />
+        <ChevronDown className={cn('h-3.5 w-3.5 shrink-0 transition', open && 'rotate-180')} />
       </button>
       <AnimatePresence>
         {open && (
           <>
             <div className="fixed inset-0 z-20" onClick={() => setOpen(false)} />
             <motion.div
-              initial={{ opacity: 0, y: 6, scale: 0.98 }}
+              initial={{ opacity: 0, y: 10, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 6, scale: 0.98 }}
+              exit={{ opacity: 0, y: 10, scale: 0.96 }}
               transition={springSnappy}
-              className="uc-glass-strong uc-scroll absolute bottom-11 left-0 z-30 max-h-72 w-64 overflow-y-auto rounded-2xl p-1"
+              className="uc-glass-strong uc-scroll absolute bottom-12 left-0 z-30 max-h-[420px] w-[340px] overflow-y-auto rounded-2xl p-2 shadow-2xl"
             >
+              <div className="mb-1.5 flex items-center justify-between px-1.5">
+                <span className="uc-tiny font-semibold uppercase tracking-wide text-muted-foreground">
+                  Select a model
+                </span>
+                {puterModels.length === 0 && (
+                  <span className="uc-tiny text-white/40">built-in · sign in for more</span>
+                )}
+              </div>
               {options.length === 0 && (
-                <div className="px-3 py-4 text-center text-[12px] text-muted-foreground">
-                  Sign in with Puter to load models.
+                <div className="px-3 py-6 text-center text-[12px] text-muted-foreground">
+                  Sign in with Puter to load the full model list.
                 </div>
               )}
-              {options.map((o) => (
-                <button
-                  key={o.id}
-                  onClick={() => {
-                    setAiModel(o.id)
-                    setOpen(false)
-                  }}
-                  className={cn(
-                    'flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left transition hover:bg-white/8',
-                    o.id === aiModel ? 'bg-white/8' : ''
-                  )}
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-[12px] font-medium">{o.label}</div>
-                    {o.provider && (
-                      <div className="text-[10px] text-muted-foreground">{o.provider}</div>
-                    )}
+              {Array.from(groups.entries()).map(([provider, items]) => (
+                <div key={provider} className="mb-1.5">
+                  <div className="uc-tiny uc-text-iridescent mb-1 px-1.5 font-semibold uppercase tracking-wide">
+                    {providerLabel(provider)}
                   </div>
-                  {o.id === aiModel && <Check className="h-3.5 w-3.5 text-violet-400" />}
-                </button>
+                  {items.map((o) => (
+                    <button
+                      key={o.id}
+                      onClick={() => {
+                        setAiModel(o.id)
+                        setOpen(false)
+                      }}
+                      className={cn(
+                        'flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left transition hover:bg-white/8',
+                        o.id === aiModel ? 'bg-white/10' : ''
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-[13px] font-medium">{o.label}</div>
+                        {o.context ? (
+                          <div className="text-[10px] text-muted-foreground">
+                            {(o.context / 1000).toFixed(0)}K context
+                          </div>
+                        ) : null}
+                      </div>
+                      {o.id === aiModel && (
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/20">
+                          <Check className="h-3 w-3 text-violet-300" />
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
               ))}
             </motion.div>
           </>
@@ -387,4 +421,22 @@ function ModelSelector({
       </AnimatePresence>
     </div>
   )
+}
+
+function providerLabel(p: string): string {
+  const map: Record<string, string> = {
+    claude: 'Anthropic · Claude',
+    anthropic: 'Anthropic · Claude',
+    gpt: 'OpenAI · GPT',
+    openai: 'OpenAI · GPT',
+    o1: 'OpenAI · o1',
+    gemini: 'Google · Gemini',
+    google: 'Google · Gemini',
+    llama: 'Meta · Llama',
+    meta: 'Meta · Llama',
+    mistral: 'Mistral',
+    groq: 'Groq',
+    other: 'Other',
+  }
+  return map[p] || p.charAt(0).toUpperCase() + p.slice(1)
 }

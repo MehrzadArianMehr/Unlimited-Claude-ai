@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useChatStore, type Message } from '@/lib/chat-store'
 import { MessageBubble, TypingBubble } from './message-bubble'
 import { ChatInput } from './chat-input'
+import { ModelPicker } from './model-picker'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { springSnappy } from '@/lib/motion-presets'
@@ -263,6 +264,16 @@ function EmptyState({
         Ask anything — get clear answers, draft text, brainstorm ideas, write
         code, or attach an image to analyze.
       </motion.p>
+
+      {/* prominent model picker — select BEFORE starting a chat */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.18, ...springSnappy }}
+        className="mt-6 w-full max-w-md"
+      >
+        <ModelPicker />
+      </motion.div>
 
       <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
         {[
