@@ -1,0 +1,34 @@
+=================================================
+                  Mehrzad ArianMehr©
+=================================================
+
+Unlimited Claude — AI Chat
+Full project, organized for GitHub.
+
+© Mehrzad ArianMehr. All rights reserved.
+
+-------------------------------------------------
+
+Project structure:
+
+  unlimited-claude/            <- this folder (zip root)
+  ├── SIGN.txt                 <- this file (signature)
+  ├── README.md                <- setup + usage docs
+  ├── start-windows.bat        <- Windows one-click launcher
+  ├── start-mac.command        <- macOS one-click launcher
+  └── app/                     <- the full Next.js project
+      ├── package.json
+      ├── prisma/schema.prisma
+      ├── public/
+      └── src/                 <- all source code
+
+Every source file in this archive carries the signature:
+    Mehrzad ArianMehr©
+
+Quick start:
+  1. Install Bun from https://bun.sh
+  2. Double-click start-windows.bat (Windows)
+     or start-mac.command (macOS)
+  3. App opens at http://localhost:3000
+
+© Mehrzad ArianMehr
