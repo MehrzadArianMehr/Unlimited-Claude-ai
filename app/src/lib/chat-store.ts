@@ -50,12 +50,31 @@ export type Profile = {
   updatedAt: string
 }
 
+export type AiModel = {
+  id: string
+  label: string
+  vendor: 'claude' | 'gpt' | 'o1' | 'gemini' | 'llama'
+}
+
+export const AI_MODELS: AiModel[] = [
+  { id: 'claude-3-5-sonnet', label: 'Claude 3.5 Sonnet', vendor: 'claude' },
+  { id: 'claude-3-7-sonnet', label: 'Claude 3.7 Sonnet', vendor: 'claude' },
+  { id: 'claude-3-5-haiku', label: 'Claude 3.5 Haiku', vendor: 'claude' },
+  { id: 'gpt-4o', label: 'GPT-4o', vendor: 'gpt' },
+  { id: 'gpt-4o-mini', label: 'GPT-4o mini', vendor: 'gpt' },
+  { id: 'o1-mini', label: 'o1-mini', vendor: 'o1' },
+  { id: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash', vendor: 'gemini' },
+  { id: 'meta-llama/llama-3.3-70b-instruct', label: 'Llama 3.3 70B', vendor: 'llama' },
+]
+
 type ChatState = {
   // data
   profile: Profile | null
   chats: ChatSummary[]
   activeChatId: string | null
   messages: Message[]
+  aiModel: string
+  setAiModel: (id: string) => void
   // loading flags
   loadingChats: boolean
   loadingMessages: boolean
@@ -81,6 +100,15 @@ export const useChatStore = create<ChatState>((set, get) => ({
   chats: [],
   activeChatId: null,
   messages: [],
+  aiModel: (typeof window !== 'undefined' && window.localStorage.getItem('uc.aiModel')) || 'claude-3-5-sonnet',
+  setAiModel(aiModel) {
+    set({ aiModel })
+    try {
+      window.localStorage.setItem('uc.aiModel', aiModel)
+    } catch {
+      /* ignore */
+    }
+  },
   loadingChats: false,
   loadingMessages: false,
   sending: false,
@@ -301,7 +329,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
           })),
         { role: 'user', content: trimmed || '(image attached)' },
       ]
-      const reply = await getPuterReply(history)
+      const reply = await getPuterReply(history, get().aiModel || undefined)
       if (reply && reply.trim()) assistantReply = reply.trim()
     } catch {
       /* puter not available — fall through to server-side z-ai */

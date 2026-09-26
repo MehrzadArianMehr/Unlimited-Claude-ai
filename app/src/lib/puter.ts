@@ -26,8 +26,20 @@ type PuterAIChat = (
   options?: { model?: string; stream?: boolean; [k: string]: unknown }
 ) => Promise<unknown>
 
+export type PuterModel = {
+  id: string
+  provider?: string
+  name?: string
+  aliases?: string[]
+  context?: number
+  max_tokens?: number
+  cost?: { currency?: string; tokens?: number; input?: number; output?: number }
+  [k: string]: unknown
+}
+
 type PuterAI = {
   chat: PuterAIChat
+  listModels?: (provider?: string) => Promise<PuterModel[]>
 }
 
 type PuterGlobal = {
@@ -58,7 +70,10 @@ export type ChatTurn = { role: 'user' | 'assistant'; content: string }
  * Puter" button in the sidebar). When signed in, Puter provides free
  * AI access through the user's own account — no .z-ai-config needed.
  */
-export async function getPuterReply(history: ChatTurn[]): Promise<string | null> {
+export async function getPuterReply(
+  history: ChatTurn[],
+  model?: string
+): Promise<string | null> {
   if (typeof window === 'undefined') return null
   const puter = window.puter
   if (!puter?.ai?.chat) return null
@@ -75,8 +90,11 @@ export async function getPuterReply(history: ChatTurn[]): Promise<string | null>
     ...history.map((m) => ({ role: m.role, content: m.content })),
   ]
 
+  const opts: { stream: boolean; model?: string } = { stream: false }
+  if (model) opts.model = model
+
   try {
-    const res = await puter.ai.chat(messages, { stream: false })
+    const res = await puter.ai.chat(messages, opts)
     // puter.ai.chat may return a string, or { message: { content } }, or { content }
     if (typeof res === 'string') return res
     if (res && typeof res === 'object') {
@@ -97,6 +115,25 @@ export async function getPuterReply(history: ChatTurn[]): Promise<string | null>
     return null
   } catch {
     return null
+  }
+}
+
+/**
+ * Fetch the AI models Puter currently exposes (via puter.ai.listModels()).
+ * Returns an empty array if Puter isn't loaded / not signed in.
+ */
+export async function getPuterModels(): Promise<PuterModel[]> {
+  if (typeof window === 'undefined') return []
+  const puter = window.puter
+  if (!puter?.ai?.listModels) return []
+  try {
+    if (typeof puter.auth?.isSignedIn === 'function' && !puter.auth.isSignedIn()) {
+      return []
+    }
+    const models = await puter.ai.listModels()
+    return Array.isArray(models) ? models : []
+  } catch {
+    return []
   }
 }
 

@@ -1,14 +1,15 @@
 'use client'
 // Mehrzad ArianMehr©
 
-import { Send, StopCircle, Paperclip, X, ImageIcon, Sparkles } from 'lucide-react'
+import { Send, StopCircle, Paperclip, X, ImageIcon, Sparkles, ChevronDown, Check } from 'lucide-react'
 import { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useChatStore, type Attachment } from '@/lib/chat-store'
+import { useChatStore, AI_MODELS, type Attachment, type AiModel } from '@/lib/chat-store'
 import { SKILLS, loadEnabledSkills, isSkillAvailable } from '@/lib/skills-registry'
+import { getPuterModels, type PuterModel } from '@/lib/puter'
 import { springSnappy } from '@/lib/motion-presets'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -34,8 +35,35 @@ export function ChatInput({ chatId }: { chatId: string | null }) {
   const sending = useChatStore((s) => s.sending)
   const sendMessage = useChatStore((s) => s.sendMessage)
   const invokeSkill = useChatStore((s) => s.invokeSkill)
+  const aiModel = useChatStore((s) => s.aiModel)
+  const setAiModel = useChatStore((s) => s.setAiModel)
+  const [puterModels, setPuterModels] = useState<PuterModel[]>([])
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  // fetch the real model list from Puter when it's ready
+  useEffect(() => {
+    let cancelled = false
+    let tries = 0
+    const tick = async () => {
+      if (cancelled) return
+      try {
+        const models = await getPuterModels()
+        if (!cancelled && models.length > 0) {
+          setPuterModels(models)
+          return
+        }
+      } catch {
+        /* ignore */
+      }
+      tries += 1
+      if (tries < 60) setTimeout(tick, 500)
+    }
+    tick()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Auto-grow textarea
   useEffect(() => {
@@ -230,6 +258,12 @@ export function ChatInput({ chatId }: { chatId: string | null }) {
             }}
           />
 
+          <ModelSelector
+            aiModel={aiModel}
+            setAiModel={setAiModel}
+            puterModels={puterModels}
+          />
+
           <Textarea
             ref={textareaRef}
             value={value}
@@ -265,6 +299,92 @@ export function ChatInput({ chatId }: { chatId: string | null }) {
           Unlimited Claude can make mistakes. Verify important info.
         </p>
       </div>
+    </div>
+  )
+}
+
+/**
+ * Model selector dropdown — shows the models Puter exposes (fetched via
+ * puter.ai.listModels()) when signed in, falling back to a built-in list.
+ */
+function ModelSelector({
+  aiModel,
+  setAiModel,
+  puterModels,
+}: {
+  aiModel: string
+  setAiModel: (id: string) => void
+  puterModels: PuterModel[]
+}) {
+  const [open, setOpen] = useState(false)
+
+  // build the option list: prefer puter's real list; fall back to built-ins
+  const options: { id: string; label: string; provider?: string }[] =
+    puterModels.length > 0
+      ? puterModels.map((m) => ({
+          id: m.id,
+          label: m.name || m.id,
+          provider: m.provider,
+        }))
+      : AI_MODELS.map((m) => ({ id: m.id, label: m.label, provider: m.vendor }))
+
+  const current =
+    options.find((o) => o.id === aiModel) ||
+    options[0] || { id: aiModel, label: aiModel }
+
+  return (
+    <div className="relative shrink-0">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="uc-pressable inline-flex h-9 max-w-[150px] items-center gap-1 rounded-full px-2.5 text-[12px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+        title="Select AI model"
+      >
+        <Sparkles className="h-3.5 w-3.5 uc-text-iridescent" />
+        <span className="truncate">{current.label}</span>
+        <ChevronDown className={cn('h-3.5 w-3.5 transition', open && 'rotate-180')} />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <>
+            <div className="fixed inset-0 z-20" onClick={() => setOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, y: 6, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 6, scale: 0.98 }}
+              transition={springSnappy}
+              className="uc-glass-strong uc-scroll absolute bottom-11 left-0 z-30 max-h-72 w-64 overflow-y-auto rounded-2xl p-1"
+            >
+              {options.length === 0 && (
+                <div className="px-3 py-4 text-center text-[12px] text-muted-foreground">
+                  Sign in with Puter to load models.
+                </div>
+              )}
+              {options.map((o) => (
+                <button
+                  key={o.id}
+                  onClick={() => {
+                    setAiModel(o.id)
+                    setOpen(false)
+                  }}
+                  className={cn(
+                    'flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left transition hover:bg-white/8',
+                    o.id === aiModel ? 'bg-white/8' : ''
+                  )}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[12px] font-medium">{o.label}</div>
+                    {o.provider && (
+                      <div className="text-[10px] text-muted-foreground">{o.provider}</div>
+                    )}
+                  </div>
+                  {o.id === aiModel && <Check className="h-3.5 w-3.5 text-violet-400" />}
+                </button>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
