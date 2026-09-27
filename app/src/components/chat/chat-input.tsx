@@ -348,7 +348,7 @@ function ModelSelector({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="uc-pressable uc-focus inline-flex h-9 max-w-[170px] items-center gap-1.5 rounded-full border border-white/10 bg-white/4 px-2.5 text-[12px] font-medium text-foreground/85 hover:bg-white/8"
+        className="uc-pressable uc-focus inline-flex h-9 max-w-[170px] items-center gap-1.5 rounded-full border border-border bg-muted/40 px-2.5 text-[12px] font-medium text-foreground/85 hover:bg-muted"
         title="Select AI model"
       >
         <span className="uc-iridescent flex h-4 w-4 shrink-0 items-center justify-center rounded">
@@ -394,8 +394,8 @@ function ModelSelector({
                         setOpen(false)
                       }}
                       className={cn(
-                        'flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left transition hover:bg-white/8',
-                        o.id === aiModel ? 'bg-white/10' : ''
+                        'flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left transition hover:bg-muted',
+                        o.id === aiModel ? 'bg-muted' : ''
                       )}
                     >
                       <div className="min-w-0 flex-1">

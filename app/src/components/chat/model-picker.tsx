@@ -117,7 +117,7 @@ export function ModelPicker() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="uc-pressable uc-focus group flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/4 p-3 text-left transition hover:bg-white/8"
+        className="uc-pressable uc-focus group flex w-full items-center gap-3 rounded-2xl border border-border bg-muted/40 p-3 text-left transition hover:bg-muted"
       >
         <span className="uc-iridescent flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-sm">
           <Sparkles className="h-5 w-5 text-white" />
@@ -128,7 +128,7 @@ export function ModelPicker() {
           </div>
           <div className="truncate text-[15px] font-semibold">{current.label}</div>
         </div>
-        <span className="inline-flex items-center gap-1 rounded-full bg-white/8 px-2.5 py-1 text-[11px] font-medium text-white/70">
+        <span className="inline-flex items-center gap-1 rounded-full bg-muted/70 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
           Change <ChevronDown className="h-3 w-3" />
         </span>
       </button>
@@ -153,7 +153,7 @@ export function ModelPicker() {
               className="uc-glass-strong uc-scroll relative max-h-[80vh] w-full max-w-lg overflow-hidden rounded-3xl"
             >
               {/* header */}
-              <div className="border-b border-white/8 p-4">
+              <div className="border-b border-border p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-[17px] font-semibold tracking-tight">Select AI model</h3>
                   <span className="uc-tiny text-white/40">
@@ -161,7 +161,7 @@ export function ModelPicker() {
                   </span>
                 </div>
                 {/* search */}
-                <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/8 bg-white/4 px-3 py-2">
+                <div className="mt-3 flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-3 py-2">
                   <Search className="h-3.5 w-3.5 text-white/40" />
                   <input
                     autoFocus
@@ -194,8 +194,8 @@ export function ModelPicker() {
                           setQuery('')
                         }}
                         className={cn(
-                          'flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition hover:bg-white/8',
-                          o.id === aiModel ? 'bg-white/10' : ''
+                          'flex w-full items-center gap-3 rounded-xl px-2.5 py-2.5 text-left transition hover:bg-muted',
+                          o.id === aiModel ? 'bg-muted' : ''
                         )}
                       >
                         <span className="uc-iridescent-soft flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold uppercase">
@@ -224,7 +224,7 @@ export function ModelPicker() {
 
               {/* footer hint */}
               {!signedIn && (
-                <div className="border-t border-white/8 px-4 py-2.5 text-center text-[11px] text-muted-foreground">
+                <div className="border-t border-border px-4 py-2.5 text-center text-[11px] text-muted-foreground">
                   Sign in with Puter (bottom of the sidebar) to load every available model.
                 </div>
               )}

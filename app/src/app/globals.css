@@ -42,10 +42,50 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Dark-only: :root and .dark both get the dark Leonardo palette */
-:root,
+/* Light mode (:root without .dark) */
+:root {
+  --background: oklch(0.985 0.002 280);
+  --foreground: oklch(0.12 0.01 280);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.12 0.01 280);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.12 0.01 280);
+
+  --primary: oklch(0.12 0.01 280);
+  --primary-foreground: oklch(0.98 0 0);
+
+  --secondary: oklch(0.95 0.004 280);
+  --secondary-foreground: oklch(0.12 0.01 280);
+
+  --muted: oklch(0.95 0.004 280);
+  --muted-foreground: oklch(0.5 0.01 280);
+
+  --accent: oklch(0.93 0.006 280);
+  --accent-foreground: oklch(0.12 0.01 280);
+
+  --destructive: oklch(0.58 0.24 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: oklch(0 0 0 / 10%);
+  --input: oklch(0 0 0 / 12%);
+  --ring: oklch(0.55 0.2 295);
+
+  --sidebar: oklch(0.97 0.003 280);
+  --sidebar-foreground: oklch(0.12 0.01 280);
+  --sidebar-primary: oklch(0.55 0.2 295);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.93 0.006 280);
+  --sidebar-accent-foreground: oklch(0.12 0.01 280);
+  --sidebar-border: oklch(0 0 0 / 8%);
+  --sidebar-ring: oklch(0.55 0.2 295);
+
+  --radius: 0.85rem;
+}
+
+/* Dark mode (.dark class) — Leonardo dark palette */
 .dark {
-  /* base: near-black with a cold violet/blue tint (#08080D → #0B0B12) */
   --background: oklch(0.07 0.012 280);
   --foreground: oklch(0.96 0.002 280);
 
@@ -55,7 +95,6 @@
   --popover: oklch(0.12 0.016 280);
   --popover-foreground: oklch(0.96 0.002 280);
 
-  /* primary = white pill buttons */
   --primary: oklch(0.97 0 0);
   --primary-foreground: oklch(0.09 0.012 280);
 
@@ -134,12 +173,22 @@
   backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
+:root:not(.dark) .uc-glass,
+:root:not(.dark) .uc-material {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
 .uc-glass-strong,
 .uc-material-strong {
   background: rgba(255, 255, 255, 0.06);
   -webkit-backdrop-filter: blur(28px) saturate(160%);
   backdrop-filter: blur(28px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+:root:not(.dark) .uc-glass-strong,
+:root:not(.dark) .uc-material-strong {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 /* bright top edge — light catching a glass surface */
 .uc-material::before,
