@@ -68,21 +68,110 @@ All enabled by default — toggle from the ✨ Skills panel.
 ## Project structure
 
 ```
-.
-├── start-windows.bat
-├── start-mac.command
-├── start-linux.sh
-├── package.json
-├── prisma/schema.prisma      # Profile, Chat, Message models
-├── public/uploads/           # generated images / uploaded files
-└── src/
-    ├── app/
-    │   ├── page.tsx
-    │   ├── layout.tsx
-    │   └── api/              # chats, messages, upload, skills, profile
-    ├── components/chat/
-    ├── hooks/
-    └── lib/
+unlimited-claude/
+├── SIGN.txt                         # Signature: Mehrzad ArianMehr©
+├── README.md                        # Full setup + feature docs
+├── RELEASE_NOTES.md                # GitHub release notes (v1.0.0)
+├── LICENSE                         # MIT License
+├── start-windows.bat               # Windows one-click launcher (4-step)
+├── start-mac.command               # macOS one-click launcher (4-step)
+├── start-linux.sh                  # Linux one-click launcher (4-step)
+│
+└── app/                            # ── The Next.js project ──
+    ├── package.json                # MIT, postinstall: prisma generate
+    ├── bun.lock                    # Lockfile (reproducible installs)
+    ├── .env                        # DATABASE_URL=file:./db/custom.db
+    ├── .gitignore
+    ├── next.config.ts              # transpilePackages: [@prisma/client, .prisma/client, sharp]
+    ├── tsconfig.json
+    ├── next-env.d.ts
+    ├── tailwind.config.ts
+    ├── postcss.config.mjs
+    ├── components.json             # shadcn/ui config (New York style)
+    ├── eslint.config.mjs
+    ├── Caddyfile                   # Gateway config
+    │
+    ├── prisma/
+    │   └── schema.prisma           # Profile, Chat, Message models
+    │
+    ├── public/
+    │   ├── logo.svg                # App logo
+    │   ├── robots.txt
+    │   └── uploads/               # Generated/uploaded files (runtime)
+    │
+    ├── scripts/
+    │   └── postbuild.mjs          # Cross-platform static-asset copy
+    │
+    └── src/
+        ├── app/
+        │   ├── page.tsx            # Single route — UC app shell + chat
+        │   ├── layout.tsx          # Dark theme + puter.js + Toaster
+        │   ├── globals.css         # Leonardo dark/light palette + glass + iridescent + motion
+        │   └── api/
+        │       ├── route.ts        # Health check
+        │       ├── profile/
+        │       │   └── route.ts    # GET/PATCH — user profile (name, avatar)
+        │       ├── chats/
+        │       │   ├── route.ts    # GET list / POST create
+        │       │   └── [id]/
+        │       │       ├── route.ts               # GET/PATCH/DELETE — one chat
+        │       │       ├── messages/route.ts      # POST — send message + AI reply
+        │       │       ├── export/route.ts        # GET — export chat as Markdown
+        │       │       └── regenerate/route.ts    # POST — regenerate last AI reply
+        │       ├── messages/
+        │       │   └── [id]/route.ts              # PATCH — edit user message + resend
+        │       ├── upload/
+        │       │   └── route.ts    # POST — file upload (50MB, auto-compress >5MB)
+        │       ├── skills/
+        │       │   └── invoke/route.ts            # POST — /image /video skills
+        │       └── download/
+        │           └── zip/route.ts               # GET — download project zip
+        │
+        ├── components/
+        │   ├── chat/
+        │   │   ├── sidebar.tsx              # Right sidebar: brand, New chat, search, chat list, Puter login
+        │   │   ├── chat-area.tsx            # Main chat: header, messages, empty state, scroll-to-bottom
+        │   │   ├── chat-input.tsx           # Bottom composer: attach, model selector, autocomplete, send
+        │   │   ├── message-bubble.tsx       # Message rendering: avatars, images, videos, copy, edit, regenerate
+        │   │   ├── model-picker.tsx        # Big grouped model picker (empty state) — by company
+        │   │   ├── help-popup.tsx          # First-load help popup (token-saving tips)
+        │   │   ├── skills-panel.tsx        # ✨ Skills panel (toggle /image /video)
+        │   │   ├── puter-account-card.tsx  # Puter login/account section (bottom of sidebar)
+        │   │   └── markdown.tsx            # ReactMarkdown renderer with .uc-prose styling
+        │   ├── puter-connect-prompt.tsx    # "Connect to AI" modal (when not signed into Puter)
+        │   ├── theme-provider.tsx          # next-themes wrapper (dark/light)
+        │   └── ui/                         # shadcn/ui primitives (40+ components)
+        │       ├── button.tsx
+        │       ├── input.tsx
+        │       ├── textarea.tsx
+        │       ├── dialog.tsx
+        │       ├── sheet.tsx
+        │       ├── dropdown-menu.tsx
+        │       ├── alert-dialog.tsx
+        │       ├── switch.tsx
+        │       ├── badge.tsx
+        │       ├── tooltip.tsx
+        │       ├── scroll-area.tsx
+        │       ├── ... (accordion, avatar, calendar, chart, checkbox, collapsible,
+        │       │     command, context-menu, form, hover-card, label, menubar,
+        │       │     navigation-menu, pagination, popover, progress, radio-group,
+        │       │     select, separator, sidebar, skeleton, slider, sonner, table,
+        │       │     tabs, toast, toaster, toggle, toggle-group)
+        │
+        ├── hooks/
+        │   ├── use-puter-auth.ts   # Puter auth state tracker (polls window.puter)
+        │   ├── use-mobile.ts        # Mobile detection (shadcn)
+        │   └── use-toast.ts        # Toast hook (shadcn)
+        │
+        └── lib/
+            ├── chat-store.ts       # Zustand store — chats, messages, profile, models, Puter AI
+            ├── puter.ts           # Puter SDK types + getPuterReply() + listModels() + isPuterReady()
+            ├── llm.ts             # z-ai SDK — getChatReply() (LLM + VLM vision) + generateChatTitle()
+            ├── db.ts              # Prisma client singleton
+            ├── chat-sections.ts   # Date-based chat grouping (Pinned/Today/Yesterday/...)
+            ├── skills-registry.ts # 3 AI skills definitions (Nano Banana, Seedance, OpenAPI)
+            ├── motion-presets.ts # Framer Motion spring presets (easeOutExpo, stagger, etc.)
+            └── utils.ts          # cn() class merger (clsx + tailwind-merge)
 ```
 
 ## Notes
