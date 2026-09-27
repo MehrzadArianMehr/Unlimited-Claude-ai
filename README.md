@@ -9,8 +9,10 @@ Built with **Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma (SQLi
 ## Screenshots
 
 <p align="center">
-  <img src="./screenshots/screenshot-1.png" width="45%" />
-  <img src="./screenshots/screenshot-2.png" width="45%" />
+<img width="2206" height="1252" alt="Screenshot 2026-09-27 at 03 56 06" src="https://github.com/user-attachments/assets/6c4584df-e01f-4aad-bbf3-6a929bce3b12" />
+<img width="2206" height="1252" alt="Screenshot 2026-09-27 at 03 56 18" src="https://github.com/user-attachments/assets/f4aab214-c997-4026-9ac5-4e119af5ee1a" />
+<img width="2206" height="1252" alt="Screenshot 2026-09-27 at 03 56 27" src="https://github.com/user-attachments/assets/32e52c41-96c6-46b4-b529-4fcaf3080294" />
+<img width="2206" height="1252" alt="Screenshot 2026-09-27 at 03 56 52" src="https://github.com/user-attachments/assets/dfb7e8e3-0375-46bf-86e7-28c1514c7a61" />
 </p>
 
 ## Quick start
