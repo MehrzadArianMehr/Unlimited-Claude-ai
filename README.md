@@ -71,7 +71,6 @@ All enabled by default — toggle from the ✨ Skills panel.
 unlimited-claude/
 ├── SIGN.txt                         # Signature: Mehrzad ArianMehr©
 ├── README.md                        # Full setup + feature docs
-├── RELEASE_NOTES.md                # GitHub release notes (v1.0.0)
 ├── LICENSE                         # MIT License
 ├── start-windows.bat               # Windows one-click launcher (4-step)
 ├── start-mac.command               # macOS one-click launcher (4-step)
